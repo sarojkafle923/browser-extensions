@@ -19,7 +19,7 @@ A small HTML/CSS/JS page rendered when the user clicks the extension's toolbar i
 A browser tab whose entire body content is a single JSON document, typically served with `Content-Type: application/json`. Common when hitting REST API endpoints or local dev servers directly in the browser.
 
 ## JSON Prettifier
-The first extension in this project. A content script that auto-detects Raw JSON Pages on load, parses the JSON, re-renders the page body as indented, syntax-highlighted text, and does nothing else (no toggle back to raw, no popup UI).
+The first extension in this project. A content script that auto-detects Raw JSON Pages on load, parses the JSON, and re-renders the page body as an interactive JSON Tree with syntax colouring and collapsible nodes (no toggle back to raw, no popup UI).
 
 ## Tree Builder
 A pure-logic Dual-Mode Module that walks a parsed JSON value recursively and returns a plain tree data structure (no DOM). Classifies each node by type, computes child counts, and assigns initial collapse state based on depth. Testable in Node.js via `node --test`.

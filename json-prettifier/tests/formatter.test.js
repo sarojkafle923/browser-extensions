@@ -7,9 +7,9 @@ test('output is parseable JSON', () => {
   assert.doesNotThrow(() => JSON.parse(result));
 });
 
-test('indents nested structures with two spaces', () => {
+test('indents nested structures with four spaces', () => {
   const result = formatJson({ a: { b: 1 } });
-  assert.ok(result.includes('  "b": 1'), `expected two-space indent, got:\n${result}`);
+  assert.ok(result.includes('        "b": 1'), `expected four-space indent, got:\n${result}`);
 });
 
 test('round-trips: parsed output deep-equals original input', () => {

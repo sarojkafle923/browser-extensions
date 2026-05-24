@@ -1,13 +1,15 @@
 # JSON Prettifier
 
-A Firefox WebExtension that automatically detects raw JSON pages and replaces the browser's default plain-text rendering with indented, syntax-highlighted JSON.
+A Firefox WebExtension that automatically detects raw JSON pages and replaces the browser's default plain-text rendering with an interactive, collapsible JSON Tree with syntax highlighting.
 
 ## What it does
 
-When you open a URL that returns a raw JSON document — a local API endpoint, a public REST API, or a `.json` file — the extension silently reformats the page body on load. No button to click, no configuration required.
+When you open a URL that returns a raw JSON document — a local API endpoint, a public REST API, or a `.json` file — the extension silently reformats the page on load. No button to click, no configuration required.
 
 **Before:** a wall of minified or unformatted text.  
-**After:** indented JSON with colour-coded keys, strings, numbers, booleans, and null values.
+**After:** an interactive JSON Tree. Root and top-level keys expand automatically; deeper nodes start collapsed with a summary (`{ N }` for objects, `[ N ]` for arrays). Click `▶`/`▼` to expand or collapse any node.
+
+A toolbar pinned at the top shows the page URL, JSON size, a Copy button (always copies the full JSON regardless of collapse state), and a search field that highlights matching tokens and auto-expands any collapsed ancestors containing a match.
 
 Works on all URLs including `localhost`.
 
@@ -18,9 +20,7 @@ Works on all URLs including `localhost`.
 3. Click **Load Temporary Add-on**
 4. Select `json-prettifier/manifest.json`
 
-The extension is active immediately and stays loaded until Firefox is closed.
-
-> To reload after editing source files, click **Reload** next to the extension in `about:debugging`.
+The extension stays loaded until Firefox is closed. Click **Reload** in `about:debugging` after editing source files.
 
 ## Running tests
 
@@ -30,37 +30,46 @@ Requires Node 18 or later. No additional dependencies.
 node --test json-prettifier/tests/*.test.js
 ```
 
-Expected output: 13 passing tests across Detector, Formatter, and Highlighter.
+Expected output: 27 passing tests across Detector, Formatter, Tree Builder, Viewer, Toolbar, and Manifest.
 
 ## File structure
 
 ```
 json-prettifier/
 ├── manifest.json          ← MV3 extension manifest
-├── content.js             ← entry point — orchestrates the three modules
-├── style.css              ← dark theme, monospace font, token colours
+├── content.js             ← entry point — orchestrates the pipeline
+├── style.css              ← dark theme, token colours, collapse/expand rules
 ├── modules/
 │   ├── detector.js        ← isRawJsonPage(document) → { detected, value }
-│   ├── formatter.js       ← formatJson(value) → string
-│   └── highlighter.js     ← highlight(jsonString) → htmlString
+│   ├── formatter.js       ← formatJson(value) → string  (used by Copy button)
+│   ├── tree-builder.js    ← buildTree(value) → plain tree data structure  (Dual-Mode)
+│   ├── tree-renderer.js   ← renderTree(node) → DOM element  (browser-only)
+│   ├── viewer.js          ← buildViewerHTML(url, formattedJson) → HTML string
+│   └── searcher.js        ← applySearch(root, query) → void  (browser-only)
 └── tests/
     ├── detector.test.js
     ├── formatter.test.js
-    └── highlighter.test.js
+    ├── tree-builder.test.js
+    ├── viewer.test.js
+    ├── toolbar.test.js
+    └── manifest.test.js
 ```
 
 ## How it works
 
-The extension injects `content.js` into every page at `document_end`. The script:
+`content.js` is injected into every page at `document_end`:
 
-1. **Detects** — tries `JSON.parse(document.body.innerText)`. If it fails, the page is not JSON and the script exits immediately.
-2. **Formats** — passes the parsed value through `JSON.stringify(value, null, 2)` for consistent two-space indentation.
-3. **Highlights** — runs a single regex pass over the formatted string, wrapping tokens in `<span>` elements with CSS classes.
-4. **Renders** — replaces the page body with a `<pre>` element containing the highlighted HTML.
+1. **Detects** — `isRawJsonPage(document)` tries `JSON.parse(document.body.innerText)`. If it fails, the script exits immediately.
+2. **Formats** — `formatJson(result.value)` produces the full formatted JSON string used by the Copy button.
+3. **Builds the tree** — `buildTree(result.value)` walks the parsed value recursively and returns a plain data structure: each node carries its type, value, children, child count, and initial collapse state (root and depth-1 always open; depth-2+ start collapsed).
+4. **Renders** — `renderTree(tree)` produces live DOM nodes with `▶`/`▼` toggle arrows and click handlers that toggle a `collapsed` CSS class.
+5. **Mounts** — the tree is appended to the `<div class="jpv-tree">` mount point inside the viewer HTML.
+
+Search fires on every input event: `applySearch(treeEl, query)` traverses all token spans, adds `.jpv-highlight` to matches (case-insensitive), and removes `.collapsed` from any ancestor nodes of a match.
 
 ## Token colour classes
 
-| Class | Token type | Default colour |
+| Class | Token type | Colour |
 |---|---|---|
 | `.json-key` | Object keys | Blue (`#9cdcfe`) |
 | `.json-string` | String values | Orange (`#ce9178`) |
@@ -68,16 +77,16 @@ The extension injects `content.js` into every page at `document_end`. The script
 | `.json-boolean` | `true` / `false` | Blue (`#569cd6`) |
 | `.json-null` | `null` | Blue (`#569cd6`) |
 
-Colours can be customised by editing `style.css`.
-
 ## Design decisions
 
-- **No toggle back to raw** — use `Ctrl+U` (View Source) if you need the original.
+- **No toggle back to raw** — `Ctrl+U` (View Source) if you need the original.
 - **No third-party libraries** — zero dependencies, no build step.
-- **XSS-safe** — HTML entities (`<`, `>`, `&`) in JSON string values are escaped before injection into `innerHTML`.
+- **Tree Builder is Dual-Mode; Tree Renderer is browser-only** — pure recursive logic lives in Tree Builder where it can be unit-tested in Node. Tree Renderer and Searcher are kept intentionally thin. See ADR 0002.
+- **Copy always copies the full JSON** — `formatJson` runs independently of the tree pipeline. Collapse state never silently truncates what is copied.
+- **`textContent` for all rendering** — DOM nodes are built with `createElement` and `.textContent`, eliminating XSS risk from JSON string values.
 
-See [ADR 0001](../docs/adr/0001-dual-mode-modules-for-node-testability.md) for the module testability pattern.
+See [ADR 0001](../docs/adr/0001-dual-mode-modules-for-node-testability.md) and [ADR 0002](../docs/adr/0002-tree-builder-renderer-testability-split.md).
 
-## Out of scope (v1)
+## Out of scope
 
-Collapsible tree view, toggle to raw, JSONP, cross-browser support, user configuration.
+Expand-all / collapse-all buttons, persisting collapse state across reloads, deep-linking to JSON paths, animated transitions, toggle to raw, JSONP, cross-browser support, user configuration.

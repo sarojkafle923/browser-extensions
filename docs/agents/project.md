@@ -17,7 +17,7 @@ A series of Firefox browser extensions built as a developer learning project. Th
 
 | Name | Status | Description |
 |---|---|---|
-| json-prettifier | Shipped | Auto-formats raw JSON pages with hand-rolled syntax highlighting |
+| json-prettifier | Shipped | Interactive collapsible JSON Tree with syntax highlighting, toolbar, and search |
 
 ## Conventions
 
