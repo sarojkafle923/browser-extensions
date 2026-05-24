@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "JSON Prettifier",
+  "version": "1.0.0",
+  "description": "Auto-formats raw JSON pages with syntax highlighting",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "modules/detector.js",
+        "modules/formatter.js",
+        "modules/highlighter.js",
+        "content.js"
+      ],
+      "css": ["style.css"],
+      "run_at": "document_end"
+    }
+  ]
+}
