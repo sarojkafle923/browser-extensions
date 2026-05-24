@@ -46,6 +46,22 @@
 
 .jpv-copy:hover { background: #1177bb; }
 
+.jpv-search {
+  padding: 4px 10px;
+  background: #3c3c3c;
+  color: #d4d4d4;
+  border: 1px solid #555;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  width: 200px;
+  outline: none;
+}
+
+.jpv-search:focus { border-color: #0e639c; }
+
+.jpv-highlight { background: #b8860b44; border-radius: 2px; }
+
 .json-prettifier-viewer pre {
   padding: 24px;
   font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;

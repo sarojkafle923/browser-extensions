@@ -22,5 +22,11 @@
     });
   });
 
+  const pre = root.querySelector('pre');
+  root.querySelector('.jpv-search').addEventListener('input', function (e) {
+    const query = e.target.value;
+    pre.innerHTML = applySearchHighlight(highlighted, query);
+  });
+
   document.body.replaceChildren(root);
 })();

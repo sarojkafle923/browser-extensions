@@ -11,6 +11,7 @@
         "modules/formatter.js",
         "modules/highlighter.js",
         "modules/viewer.js",
+        "modules/searcher.js",
         "content.js"
       ],
 "run_at": "document_end"

@@ -11,6 +11,7 @@ function buildViewerHTML(highlightedHtml, url, formattedJson) {
     + `<span class="jpv-url">${url || ''}</span>`
     + `<span class="jpv-size">${size}</span>`
     + `<button class="jpv-copy">Copy</button>`
+    + `<input class="jpv-search" type="text" placeholder="Search keys and values…" />`
     + `</div>`
     + `<pre>${highlightedHtml}</pre>`
     + `</div>`;
