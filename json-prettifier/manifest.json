@@ -9,7 +9,8 @@
       "js": [
         "modules/detector.js",
         "modules/formatter.js",
-        "modules/highlighter.js",
+        "modules/tree-builder.js",
+        "modules/tree-renderer.js",
         "modules/viewer.js",
         "modules/searcher.js",
         "content.js"

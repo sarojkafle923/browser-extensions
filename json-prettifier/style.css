@@ -62,16 +62,31 @@
 
 .jpv-highlight { background: #b8860b44; border-radius: 2px; }
 
-.json-prettifier-viewer pre {
+.jpv-tree {
   padding: 24px;
   font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
   font-size: 14px;
   line-height: 1.6;
   color: #d4d4d4;
-  white-space: pre-wrap;
-  word-break: break-word;
-  margin: 0;
 }
+
+.jpv-children { padding-left: 1.5em; }
+
+.jpv-toggle {
+  cursor: pointer;
+  user-select: none;
+  color: #858585;
+  margin-right: 4px;
+  display: inline-block;
+  width: 1em;
+}
+
+.jpv-toggle:hover { color: #d4d4d4; }
+
+.jpv-count { display: none; }
+.jpv-node.collapsed .jpv-count    { display: inline; }
+.jpv-node.collapsed .jpv-children { display: none; }
+.jpv-node.collapsed .jpv-closer   { display: none; }
 
 .json-key     { color: #9cdcfe; }
 .json-string  { color: #ce9178; }

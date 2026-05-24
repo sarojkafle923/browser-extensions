@@ -8,10 +8,10 @@
   document.head.appendChild(link);
 
   const formatted = formatJson(result.value);
-  const highlighted = highlight(formatted);
+  const tree = buildTree(result.value);
 
   const viewer = document.createElement('div');
-  viewer.innerHTML = buildViewerHTML(highlighted, location.href, formatted);
+  viewer.innerHTML = buildViewerHTML(location.href, formatted);
   const root = viewer.firstElementChild;
 
   root.querySelector('.jpv-copy').addEventListener('click', function (e) {
@@ -22,10 +22,7 @@
     });
   });
 
-  const pre = root.querySelector('pre');
-  root.querySelector('.jpv-search').addEventListener('input', function (e) {
-    pre.innerHTML = applySearchHighlight(highlighted, e.target.value);
-  });
+  root.querySelector('.jpv-tree').appendChild(renderTree(tree));
 
   document.body.replaceChildren(root);
 })();

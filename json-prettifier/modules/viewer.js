@@ -4,7 +4,7 @@ function formatByteSize(bytes) {
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 }
 
-function buildViewerHTML(highlightedHtml, url, formattedJson) {
+function buildViewerHTML(url, formattedJson) {
   const size = formatByteSize((formattedJson || '').length);
   return `<div class="json-prettifier-viewer">`
     + `<div class="jpv-toolbar">`
@@ -13,7 +13,7 @@ function buildViewerHTML(highlightedHtml, url, formattedJson) {
     + `<button class="jpv-copy">Copy</button>`
     + `<input class="jpv-search" type="text" placeholder="Search keys and values…" />`
     + `</div>`
-    + `<pre>${highlightedHtml}</pre>`
+    + `<div class="jpv-tree"></div>`
     + `</div>`;
 }
 

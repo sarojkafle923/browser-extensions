@@ -20,23 +20,23 @@ test('formatByteSize returns MB for megabyte range', () => {
 });
 
 test('buildViewerHTML output contains a toolbar element', () => {
-  const result = buildViewerHTML('<span>json</span>', 'https://example.com/api', '{"a":1}');
+  const result = buildViewerHTML('https://example.com/api', '{"a":1}');
   assert.ok(result.includes('class="jpv-toolbar"'), result);
 });
 
 test('toolbar contains the URL', () => {
-  const result = buildViewerHTML('<span>json</span>', 'https://api.github.com/users/octocat', '{}');
+  const result = buildViewerHTML('https://api.github.com/users/octocat', '{}');
   assert.ok(result.includes('https://api.github.com/users/octocat'), result);
 });
 
 test('toolbar contains the formatted byte size', () => {
   const formattedJson = '{\n  "name": "Alice"\n}';
-  const result = buildViewerHTML('<span>json</span>', 'https://example.com', formattedJson);
+  const result = buildViewerHTML('https://example.com', formattedJson);
   assert.ok(result.includes(formatByteSize(formattedJson.length)), result);
 });
 
 test('toolbar contains a Copy button', () => {
-  const result = buildViewerHTML('<span>json</span>', 'https://example.com', '{}');
+  const result = buildViewerHTML('https://example.com', '{}');
   assert.ok(result.includes('class="jpv-copy"'), result);
   assert.ok(result.includes('Copy'), result);
 });
