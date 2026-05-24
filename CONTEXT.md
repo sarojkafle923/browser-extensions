@@ -27,5 +27,17 @@ A hand-rolled regex-based function (no third-party library) that colorizes JSON 
 ## Host Permission
 A manifest declaration that grants an extension access to pages matching a URL pattern. Required for content scripts to run on a given origin.
 
+## Pretty Viewer
+The full UI that the JSON Prettifier renders in place of a Raw JSON Page. Composed of a Viewer Toolbar pinned at the top and a full-width JSON content area below it.
+
+## Viewer Toolbar
+The persistent bar pinned at the top of the Pretty Viewer. Contains: the page URL, JSON size metadata, a Copy button (copies formatted JSON to clipboard), and a Search Input.
+
+## Search Highlight
+The visual emphasis applied to JSON tokens — both keys and values — that match the current Search Input query. Rendered as a background colour over the matched token, distinct from the token's syntax colour class.
+
+## Search Input
+The text field in the Viewer Toolbar. On input, triggers a Search Highlight pass over all visible JSON tokens matching the query (case-insensitive, keys and values).
+
 ## Dual-Mode Module
 A JavaScript module file that works both as a browser content script and as a Node.js `require()`-able module — without a bundler. Achieved by ending the file with `if (typeof module !== 'undefined') module.exports = { ... }`. The guard is a no-op in the browser. Used to enable `node --test` unit testing of pure-logic modules. See ADR 0001.
