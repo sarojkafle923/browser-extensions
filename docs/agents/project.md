@@ -11,13 +11,13 @@ A series of Firefox browser extensions built as a developer learning project. Th
 - **Manifest version:** MV3 (Manifest V3)
 - **Language:** Vanilla JavaScript — no framework, no bundler, no build step
 - **Styling:** Plain CSS
-- **Test runner:** None established yet
+- **Test runner:** `node --test` (Node.js built-in, Node 18+) — no additional dependencies
 
 ## Extension inventory
 
 | Name | Status | Description |
 |---|---|---|
-| json-prettifier | In progress | Auto-formats raw JSON pages with hand-rolled syntax highlighting |
+| json-prettifier | Shipped | Auto-formats raw JSON pages with hand-rolled syntax highlighting |
 
 ## Conventions
 

@@ -26,3 +26,6 @@ A hand-rolled regex-based function (no third-party library) that colorizes JSON 
 
 ## Host Permission
 A manifest declaration that grants an extension access to pages matching a URL pattern. Required for content scripts to run on a given origin.
+
+## Dual-Mode Module
+A JavaScript module file that works both as a browser content script and as a Node.js `require()`-able module — without a bundler. Achieved by ending the file with `if (typeof module !== 'undefined') module.exports = { ... }`. The guard is a no-op in the browser. Used to enable `node --test` unit testing of pure-logic modules. See ADR 0001.
