@@ -1,13 +1,7 @@
 function renderPrimitive(node) {
   const span = document.createElement('span');
   span.className = 'json-' + node.type;
-  if (node.type === 'string') {
-    span.textContent = JSON.stringify(node.value);
-  } else if (node.type === 'null') {
-    span.textContent = 'null';
-  } else {
-    span.textContent = String(node.value);
-  }
+  span.textContent = node.type === 'string' ? JSON.stringify(node.value) : String(node.value);
   return span;
 }
 
@@ -41,28 +35,24 @@ function renderContainer(node, depth) {
   const children = document.createElement('div');
   children.className = 'jpv-children';
 
-  if (isObject) {
-    node.children.forEach(function (entry, i) {
-      const row = document.createElement('div');
-      row.className = 'jpv-entry';
+  const entries = isObject
+    ? node.children
+    : node.children.map(function (n) { return { key: null, node: n }; });
+
+  entries.forEach(function (entry, i) {
+    const row = document.createElement('div');
+    row.className = 'jpv-entry';
+    if (entry.key !== null) {
       const key = document.createElement('span');
       key.className = 'json-key';
       key.textContent = JSON.stringify(entry.key) + ':';
       row.appendChild(key);
       row.appendChild(document.createTextNode(' '));
-      row.appendChild(renderTree(entry.node, depth + 1));
-      if (i < node.children.length - 1) row.appendChild(document.createTextNode(','));
-      children.appendChild(row);
-    });
-  } else {
-    node.children.forEach(function (childNode, i) {
-      const row = document.createElement('div');
-      row.className = 'jpv-entry';
-      row.appendChild(renderTree(childNode, depth + 1));
-      if (i < node.children.length - 1) row.appendChild(document.createTextNode(','));
-      children.appendChild(row);
-    });
-  }
+    }
+    row.appendChild(renderTree(entry.node, depth + 1));
+    if (i < entries.length - 1) row.appendChild(document.createTextNode(','));
+    children.appendChild(row);
+  });
 
   el.appendChild(children);
 
@@ -74,8 +64,7 @@ function renderContainer(node, depth) {
   return el;
 }
 
-function renderTree(node, depth) {
-  depth = depth === undefined ? 0 : depth;
+function renderTree(node, depth = 0) {
   if (node.type === 'object' || node.type === 'array') return renderContainer(node, depth);
   return renderPrimitive(node);
 }
