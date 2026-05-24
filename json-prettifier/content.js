@@ -22,7 +22,12 @@
     });
   });
 
-  root.querySelector('.jpv-tree').appendChild(renderTree(tree));
+  const treeEl = root.querySelector('.jpv-tree');
+  treeEl.appendChild(renderTree(tree));
+
+  root.querySelector('.jpv-search').addEventListener('input', function (e) {
+    applySearch(treeEl, e.target.value);
+  });
 
   document.body.replaceChildren(root);
 })();

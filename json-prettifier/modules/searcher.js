@@ -1,15 +1,27 @@
-function applySearchHighlight(highlightedHtml, query) {
-  if (!query) return highlightedHtml;
-  const lower = query.toLowerCase();
-  return highlightedHtml.replace(
-    /<span class="([^"]+)">([^<]+)<\/span>/g,
-    function (match, classes, text) {
-      if (text.toLowerCase().includes(lower)) {
-        return `<span class="${classes} jpv-highlight">${text}</span>`;
-      }
-      return match;
-    }
-  );
-}
+function applySearch(root, query) {
+  const tokens = root.querySelectorAll('.json-key, .json-string, .json-number, .json-boolean, .json-null');
 
-if (typeof module !== 'undefined') module.exports = { applySearchHighlight };
+  tokens.forEach(function (token) {
+    token.classList.remove('jpv-highlight');
+  });
+
+  if (!query) return;
+
+  const lower = query.toLowerCase();
+
+  tokens.forEach(function (token) {
+    if (!token.textContent.toLowerCase().includes(lower)) return;
+
+    token.classList.add('jpv-highlight');
+
+    let ancestor = token.parentElement;
+    while (ancestor && ancestor !== root) {
+      if (ancestor.classList.contains('jpv-node') && ancestor.classList.contains('collapsed')) {
+        ancestor.classList.remove('collapsed');
+        const toggle = ancestor.querySelector(':scope > .jpv-toggle');
+        if (toggle) toggle.textContent = '▼';
+      }
+      ancestor = ancestor.parentElement;
+    }
+  });
+}
