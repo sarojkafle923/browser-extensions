@@ -10,7 +10,7 @@
   const formatted = formatJson(result.value);
   const highlighted = highlight(formatted);
 
-  const pre = document.createElement('pre');
-  pre.innerHTML = highlighted;
-  document.body.replaceChildren(pre);
+  const viewer = document.createElement('div');
+  viewer.innerHTML = buildViewerHTML(highlighted);
+  document.body.replaceChildren(viewer.firstElementChild);
 })();

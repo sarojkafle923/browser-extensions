@@ -10,6 +10,7 @@
         "modules/detector.js",
         "modules/formatter.js",
         "modules/highlighter.js",
+        "modules/viewer.js",
         "content.js"
       ],
 "run_at": "document_end"

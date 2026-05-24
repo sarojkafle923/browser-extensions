@@ -1,10 +1,11 @@
-body {
+.json-prettifier-viewer {
   background: #1e1e1e;
-  margin: 0;
-  padding: 16px;
+  min-height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
-pre {
+.json-prettifier-viewer pre {
   font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
   font-size: 14px;
   line-height: 1.6;
