@@ -11,6 +11,16 @@
   const highlighted = highlight(formatted);
 
   const viewer = document.createElement('div');
-  viewer.innerHTML = buildViewerHTML(highlighted);
-  document.body.replaceChildren(viewer.firstElementChild);
+  viewer.innerHTML = buildViewerHTML(highlighted, location.href, formatted);
+  const root = viewer.firstElementChild;
+
+  root.querySelector('.jpv-copy').addEventListener('click', function (e) {
+    const btn = e.currentTarget;
+    navigator.clipboard.writeText(formatted).then(function () {
+      btn.textContent = 'Copied!';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+
+  document.body.replaceChildren(root);
 })();
