@@ -24,8 +24,7 @@
 
   const pre = root.querySelector('pre');
   root.querySelector('.jpv-search').addEventListener('input', function (e) {
-    const query = e.target.value;
-    pre.innerHTML = applySearchHighlight(highlighted, query);
+    pre.innerHTML = applySearchHighlight(highlighted, e.target.value);
   });
 
   document.body.replaceChildren(root);
