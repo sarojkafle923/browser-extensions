@@ -1,1 +1,21 @@
-/* placeholder — filled in during issue #4 */
+body {
+  background: #1e1e1e;
+  margin: 0;
+  padding: 16px;
+}
+
+pre {
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.json-key     { color: #9cdcfe; }
+.json-string  { color: #ce9178; }
+.json-number  { color: #b5cea8; }
+.json-boolean { color: #569cd6; }
+.json-null    { color: #569cd6; }
