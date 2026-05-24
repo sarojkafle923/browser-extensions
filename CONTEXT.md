@@ -21,8 +21,14 @@ A browser tab whose entire body content is a single JSON document, typically ser
 ## JSON Prettifier
 The first extension in this project. A content script that auto-detects Raw JSON Pages on load, parses the JSON, re-renders the page body as indented, syntax-highlighted text, and does nothing else (no toggle back to raw, no popup UI).
 
-## Syntax Highlighter
-A hand-rolled regex-based function (no third-party library) that colorizes JSON tokens — strings, numbers, booleans, null, and object keys — using `<span>` elements with distinct CSS classes.
+## Tree Builder
+A pure-logic Dual-Mode Module that walks a parsed JSON value recursively and returns a plain tree data structure (no DOM). Classifies each node by type, computes child counts, and assigns initial collapse state based on depth. Testable in Node.js via `node --test`.
+
+## Tree Renderer
+A browser-only module (not Dual-Mode) that consumes the Tree Builder's output and produces the JSON Tree DOM structure. Applies syntax colouring and toggle arrow affordances. Not unit-tested in Node — kept thin so the logic under test lives in the Tree Builder.
+
+## JSON Tree
+The interactive UI artifact rendered by the Tree Renderer in place of the former flat `<pre>` output. A nested DOM structure where each object and array node can be collapsed or expanded individually. Collapsed nodes display a summary: `{ N }` for objects (N = number of keys) and `[ N ]` for arrays (N = number of items).
 
 ## Host Permission
 A manifest declaration that grants an extension access to pages matching a URL pattern. Required for content scripts to run on a given origin.
